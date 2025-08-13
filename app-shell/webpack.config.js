@@ -41,7 +41,7 @@ module.exports = {
     new ModuleFederationPlugin({
       name: 'app-shell',
       remotes: {
-        shared_header: `shared_header@${REMOTE_SHARED_HEADER}`
+        shared_header: `shared_header@https://shared-header-yt.netlify.app/remoteEntry.js`
       },
       shared: {
         react: {
