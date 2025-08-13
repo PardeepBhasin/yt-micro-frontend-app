@@ -1,0 +1,33 @@
+name: Deploy App Shell
+
+on:
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - run: npm ci
+        working-directory: app-shell
+
+      - run: npm run build
+        working-directory: app-shell
+        env:
+          NODE_ENV: production
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v1.2
+        with:
+          publish-dir: './app-shell/dist'
+          production-branch: 'main'
+          deploy-message: 'Deploy from GitHub Actions'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.APP_SHELL_NETLIFY_SITE_ID }}
